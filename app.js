@@ -15,11 +15,11 @@ var campgroundSchema = new mongoose.Schema({
 
 var Campground = mongoose.model('Campground', campgroundSchema);
 
-Campground.create({
-  name: 'Granite Hill',
-  image: 'https://pixabay.com/get/ea36b70928f21c22d2524518b7444795ea76e5d004b0144391f5c07bafeabc_340.jpg',
-  description: 'very Huge'
-});
+// Campground.create({
+//   name: 'Granite Hill',
+//   image: 'https://pixabay.com/get/ea36b70928f21c22d2524518b7444795ea76e5d004b0144391f5c07bafeabc_340.jpg',
+//   description: 'very Huge'
+// });
 
   
 app.use(bodyParser.urlencoded({extended: true}));
@@ -37,7 +37,7 @@ app.get('/campgrounds', function(req, res) {
       return;
     }
     
-    res.render('campgrounds', {campgrounds: allCampgrounds});
+    res.render('index', {campgrounds: allCampgrounds});
   });
 });
 
@@ -45,7 +45,8 @@ app.post('/campgrounds', function(req, res) {
   //post route when creating a new campground
   let name = req.body.name;
   let image = req.body.image;
-  let newCampground = {name, image};
+  let description = req.body.description;
+  let newCampground = {name, image, description};
   
   Campground.create(newCampground, (err, newlyCreated) => {
     if(err) {
@@ -63,7 +64,15 @@ app.get('/campgrounds/new', function(req, res) {
 });
 
 app.get('/campgrounds/:id', function(req, res) {
-  res.send('show page eventually');
+  Campground.findById(req.params.id, (err, foundCampground) => {
+    if(err) {
+      console.log(`Error: ${err}`);
+      return;
+    }
+    
+    res.render('show', {campground: foundCampground});
+  });
+  
 });
 
 app.listen(process.env.PORT, process.env.IP, function() {
