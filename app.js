@@ -1,19 +1,17 @@
-var express = require('express'),
+var express = require("express"),
     app = express(),
-    bodyParser = require('body-parser'),
-    mongoose = require('mongoose');
+    bodyParser = require("body-parser"),
+    mongoose = require("mongoose"),
+    seedDB = require("./seeds");
+    
+const Campground = require('./models/campground');
     
 //connect to DB
 mongoose.connect('mongodb://localhost/yelp_camp');
 
-//Schema
-var campgroundSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String
-});
+//seed db
+seedDB();
 
-var Campground = mongoose.model('Campground', campgroundSchema);
 
 // Campground.create({
 //   name: 'Granite Hill',
@@ -30,6 +28,7 @@ app.get('/', function(req, res) {
   res.render('landing');
 });
 
+//index
 app.get('/campgrounds', function(req, res) {
   Campground.find({}, (err, allCampgrounds) => {
     if(err) {
@@ -41,6 +40,7 @@ app.get('/campgrounds', function(req, res) {
   });
 });
 
+//create
 app.post('/campgrounds', function(req, res) {
   //post route when creating a new campground
   let name = req.body.name;
@@ -59,12 +59,14 @@ app.post('/campgrounds', function(req, res) {
   });
 });
 
+//new
 app.get('/campgrounds/new', function(req, res) {
   res.render('new');
 });
 
+//show
 app.get('/campgrounds/:id', function(req, res) {
-  Campground.findById(req.params.id, (err, foundCampground) => {
+  Campground.findById(req.params.id).populate('comments').exec((err, foundCampground) => {
     if(err) {
       console.log(`Error: ${err}`);
       return;
