@@ -24,24 +24,24 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
 
-app.get('/', function(req, res) {
-  res.render('landing');
+app.get('/', (req, res) => {
+  res.redirect('/campgrounds');
 });
 
 //index
-app.get('/campgrounds', function(req, res) {
+app.get('/campgrounds', (req, res) => {
   Campground.find({}, (err, allCampgrounds) => {
     if(err) {
       console.log(`Error: ${err}`);
       return;
     }
     
-    res.render('index', {campgrounds: allCampgrounds});
+    res.render('campgrounds/index', {campgrounds: allCampgrounds});
   });
 });
 
 //create
-app.post('/campgrounds', function(req, res) {
+app.post('/campgrounds', (req, res) => {
   //post route when creating a new campground
   let name = req.body.name;
   let image = req.body.image;
@@ -60,23 +60,51 @@ app.post('/campgrounds', function(req, res) {
 });
 
 //new
-app.get('/campgrounds/new', function(req, res) {
-  res.render('new');
+app.get('/campgrounds/new', (req, res) => {
+  res.render('campgrounds/new');
 });
 
 //show
-app.get('/campgrounds/:id', function(req, res) {
+app.get('/campgrounds/:id', (req, res) => {
   Campground.findById(req.params.id).populate('comments').exec((err, foundCampground) => {
     if(err) {
       console.log(`Error: ${err}`);
       return;
     }
     
-    res.render('show', {campground: foundCampground});
+    res.render('campgrounds/show', {campground: foundCampground});
   });
-  
 });
 
-app.listen(process.env.PORT, process.env.IP, function() {
+
+//Comments routes
+
+//new
+app.get('/campgrounds/:id/comments/new', (req, res) => {
+  Campground.findById(req.params.id, (err, foundCampground) => {
+    if(err) {
+      res.redirect('/campgrounds');
+      return;
+    }
+    
+    //success
+    res.render('comments/new', {campground: foundCampground});
+  });
+});
+
+//create
+app.post('/campgrounds/:id/comments', (req, res) => {
+  Campground.findById(req.params.id, (err, foundCampground) => {
+    if (err) {
+      res.redirect('/campgrounds');
+      return;
+    }
+    
+    //success, add comment
+    
+  });
+});
+
+app.listen(process.env.PORT, process.env.IP, () => {
   console.log('Yelpcamp started!');
 });
