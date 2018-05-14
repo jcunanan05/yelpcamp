@@ -4,13 +4,14 @@ var express = require("express"),
     mongoose = require("mongoose"),
     seedDB = require("./seeds");
     
-const Campground = require('./models/campground');
+const Campground = require("./models/campground");
+const Comment = require("./models/comment")
     
 //connect to DB
 mongoose.connect('mongodb://localhost/yelp_camp');
 
 //seed db
-seedDB();
+// seedDB();
 
 
 // Campground.create({
@@ -101,7 +102,17 @@ app.post('/campgrounds/:id/comments', (req, res) => {
     }
     
     //success, add comment
-    
+    Comment.create(req.body.comment, (err, createdComment) => {
+      if(err) {
+        console.log(err);
+        return;
+      }
+      
+      //success
+      foundCampground.comments.push(createdComment);
+      foundCampground.save();
+      res.redirect(`/campgrounds/${foundCampground._id}`);
+    });
   });
 });
 

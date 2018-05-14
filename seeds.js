@@ -5,7 +5,7 @@ const data = [
   {
     name: "Cloud's Rest",
     image: "https://images.unsplash.com/photo-1455496231601-e6195da1f841?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=4d1156d3e4dfafbc71a9f293939f3243&auto=format&fit=crop&w=500&q=60",
-    description: "Beautiful Campground! hey hey hey hey"
+    description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos optio alias architecto. Praesentium, laudantium, atque. Omnis id reiciendis aspernatur harum iure dolore totam. Praesentium ea dolores, rerum incidunt facere, quos."
   },
   {
     name: "Starry Night",
