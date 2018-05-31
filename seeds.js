@@ -68,3 +68,10 @@ function seedDB() {
 
 
 module.exports = seedDB;
+
+
+// Campground.create({
+//   name: 'Granite Hill',
+//   image: 'https://pixabay.com/get/ea36b70928f21c22d2524518b7444795ea76e5d004b0144391f5c07bafeabc_340.jpg',
+//   description: 'very Huge'
+// });

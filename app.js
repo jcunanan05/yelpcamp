@@ -2,10 +2,13 @@ var express = require("express"),
     app = express(),
     bodyParser = require("body-parser"),
     mongoose = require("mongoose"),
+    passport = require("passport"),
+    LocalStrategy = require("passport-local")
     seedDB = require("./seeds");
     
 const Campground = require("./models/campground");
 const Comment = require("./models/comment")
+const User = require("./models/user");
     
 //connect to DB
 mongoose.connect('mongodb://localhost/yelp_camp');
@@ -13,14 +16,20 @@ mongoose.connect('mongodb://localhost/yelp_camp');
 //seed db
 // seedDB();
 
+// Passport Config
+app.use(require("express-session")({
+  secret: "the secret",
+  resave: false,
+  saveUninitialized: false
+}));
 
-// Campground.create({
-//   name: 'Granite Hill',
-//   image: 'https://pixabay.com/get/ea36b70928f21c22d2524518b7444795ea76e5d004b0144391f5c07bafeabc_340.jpg',
-//   description: 'very Huge'
-// });
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.serializeUser(User.deserializeUser());
+ 
 
-  
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 app.use(express.static(`${__dirname}/public`));
@@ -113,6 +122,29 @@ app.post('/campgrounds/:id/comments', (req, res) => {
       foundCampground.comments.push(createdComment);
       foundCampground.save();
       res.redirect(`/campgrounds/${foundCampground._id}`);
+    });
+  });
+});
+
+//======================== AUTH ROUTES
+//register from
+app.get('/register', (req, res) => {
+  res.render('register');
+});
+
+app.post('/register', (req, res) => {
+  const credentials = req.body.signup;
+  const newUser = new User({username: credentials.username});
+  
+  User.register(newUser, credentials.password, (err, user) => {
+    if(err) {
+      console.log(err);
+      return res.render('register');
+    }
+    
+    //success
+    passport.authenticate('local')(req, res, () =>{
+      res.redirect('/campgrounds');
     });
   });
 });
