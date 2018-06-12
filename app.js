@@ -27,7 +27,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
-passport.serializeUser(User.deserializeUser());
+passport.deserializeUser(User.deserializeUser());
  
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -148,6 +148,21 @@ app.post('/register', (req, res) => {
     });
   });
 });
+
+//login routes
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+//login
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/campgrounds',
+    failureRedirect: '/login'
+  }), 
+  (req, res) => {
+    // callback
+  });
+
 
 app.listen(process.env.PORT, process.env.IP, () => {
   console.log('Yelpcamp started!');
