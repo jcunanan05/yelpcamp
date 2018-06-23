@@ -39,7 +39,7 @@ function feedData() {
       }
       
       //success, add comment
-      addComment(createdCampground, newComment);
+      // addComment(createdCampground, newComment);
     });
   });
 }

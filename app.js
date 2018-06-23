@@ -13,8 +13,6 @@ const User = require("./models/user");
 const commentRoutes = require("./routes/comments"),
   campgroundRoutes = require("./routes/campgrounds"),
   authRoutes = require("./routes/index");
-  
-  // 6:45
     
 //connect to DB
 mongoose.connect('mongodb://localhost/yelp_camp');
