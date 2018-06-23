@@ -61,9 +61,9 @@ function addComment(campground, comment) {
 
 function seedDB() {
   emptyDB();
-  feedData();
-  feedData();
-  feedData();
+  // feedData();
+  // feedData();
+  // feedData();
 }
 
 
