@@ -22,7 +22,13 @@
             <p>by <strong><%= campground.author.username %></strong></p>
             <p><%= campground.description %></p>
             
-            <a href="/campgrounds/<%= campground._id %>/edit" class="btn btn-warning">Edit Campground</a>
+            <% if(currentUser && currentUser.username === campground.author.username){ %>
+              <a href="/campgrounds/<%= campground._id %>/edit" class="btn btn-xs btn-warning">Edit Campground</a>
+              
+              <form id="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
+                <button class="btn btn-xs btn-danger">Delete</button>
+              </form>
+            <% } %>
           </div>
         </div>
         

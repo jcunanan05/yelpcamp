@@ -6,6 +6,10 @@
   width: 100%;
 }
 
-/*.thumbnail .caption-full {*/
-/*  padding: 9px;*/
-/*}*/
+.thumbnail .caption-full {
+  padding: 9px;
+}
+
+#delete-form {
+  display: inline;
+}
